@@ -1,0 +1,73 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_VirtualMachine3_name": {
+            "defaultValue": "VirtualMachine33300",
+            "type": "String"
+        },
+        "disks_VirtualMachine3_OsDisk_1_23e94b0a82094bf8ac8a3e6374bd6aa6_externalid": {
+            "defaultValue": "/subscriptions/d2bc0c62-740c-43d0-b0af-2336beb4786c/resourceGroups/v-joanya/providers/Microsoft.Compute/disks/VirtualMachine3_OsDisk_1_23e94b0a82094bf8ac8a3e6374bd6aa6",
+            "type": "String"
+        },
+        "networkInterfaces_virtualmachine3962_externalid": {
+            "defaultValue": "/subscriptions/d2bc0c62-740c-43d0-b0af-2336beb4786c/resourceGroups/v-joanya/providers/Microsoft.Network/networkInterfaces/virtualmachine3962",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-03-01",
+            "name": "[parameters('virtualMachines_VirtualMachine3_name')]",
+            "location": "eastus",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_DS2_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2019-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_VirtualMachine3_name'), '_OsDisk_1_23e94b0a82094bf8ac8a3e6374bd6aa6')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "id": "[parameters('disks_VirtualMachine3_OsDisk_1_23e94b0a82094bf8ac8a3e6374bd6aa6_externalid')]"
+                        }
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_VirtualMachine3_name')]",
+                    "adminUsername": "johnsonanya",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfaces_virtualmachine3962_externalid')]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "https://myvmstorage900.blob.core.windows.net/"
+                    }
+                }
+            }
+        }
+    ]
+}
